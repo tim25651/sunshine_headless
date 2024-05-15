@@ -34,8 +34,12 @@ EOF
 lspci | grep VGA | grep NVIDIA | cut -d' ' -f1
 
 ### activate twinview
-sudo mkdir /etc/X11/xorg.conf.d/
-sudo cp twinview.conf /etc/X11/xorg.conf.d/20-twinview.conf
+if [ ! -d "/etc/X11/xorg.conf.d/" ]; then sudo mkdir /etc/X11/xorg.conf.d/; fi
+# then either
+sudo cp twinview_with_real.conf /etc/X11/xorg.conf.d/20-twinview.conf
+# or
+sudo cp twinview_just_virtual.conf /etc/X11/xorg.conf.d/20-twinview.conf
+
 ### start ubuntu-flavored gnome
 cp .xinitrc ~/.xinitrc
 ### make it accessible as a service

@@ -8,7 +8,7 @@ fi
 SS_UI=1
 SS_HD=0
 
-USER_DISPLAY=$(find /tmp/.X11-unix -user $USER | awk -F'.X11-unix/X' '{print $2}' | sort | tail -n 1)
+USER_DISPLAY=$(find /tmp/.X11-unix -user $USER | awk -F'.X11-unix/X' '{print $2}' | sort | head -n 1)
 
 if [ $USER_DISPLAY ]; then
     VT=0
@@ -26,15 +26,20 @@ else
 fi
 
 sudo control_tty_access 0 $SS_UI $SS_HD $USER
-sunshine | grep -E "established|connected: true" &
 
-if [ $SERVICE ]; then
+echo "SERVICE MODE=$SERVICE"
+if [ $SERVICE -eq 1 ]; then
+    sunshine | grep -E 'established|connected: true' &
+    echo "Storing TTY $VT for cleanup in /tmp/sunshine_service"
     echo $VT > /tmp/sunshine_service
 else
+    sunshine | grep -E 'established|connected: true'
     if [ $X_PID ]; then
+        echo "Killing X Server ($X_PID)"
         kill -15 $X_PID
     fi
 
+    echo "Cleanup ..."
     sudo control_tty_access $VT 0 -1 root
 fi
-exit 0 
+exit 0
