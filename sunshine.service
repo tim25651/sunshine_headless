@@ -4,6 +4,6 @@ Description=Sunshine Gamestream Server for Moonlight
 [Service]
 Type=forking
 ExecStart=sunshine_startx service
-ExecStop=bash -c "sudo control_tty_access $(/tmp/sunshine_service) 2 0 -1 root"
+ExecStop=bash -c "sudo control_tty_access $(/tmp/sunshine_service) 0 -1 root"
 [Install]
 WantedBy=graphical-session.target
