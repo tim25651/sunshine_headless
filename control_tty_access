@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Define the usage function
+usage() {
+  echo "Usage: $0 tty uinput hidraw user"
+  echo "Enable with tty>=0, uinput=1 or/and hidraw>=0 (corresponding to the correct device)"
+  exit 1
+}
+
+# Check if all arguments are given
+if [ $# -lt 4 ]; then
+  usage
+fi
+
+SS_TTY=$1
+SS_UI=$2
+SS_HD=$3
+SS_US=$4
+
+# echo "TTY $SS_TTY, UI $SS_UI, HD $SS_HD, US $SS_US"
+if [ $SS_TTY -gt 0 ]; then
+    if [ $SS_US != "root" ]; then
+        chown $SS_US:tty /dev/tty$SS_TTY
+    else
+        chown root:tty /dev/tty$SS_TTY
+   fi
+fi
+
+if [ $SS_UI -eq 1 ]; then
+    chown $(id -un $SS_US):$(id -gn $SS_US) /dev/uinput
+fi
+if [ $SS_HD -ge 0 ]; then
+    chown $(id -un $SS_HD):$(id -gn $SS_US) /dev/hidraw$SS_HD
+fi
+
+# Exit the script
+exit 0

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+SERVICE=0
+if [ $1 == "service" ]; then
+    SERVICE=1
+fi
+
+SS_UI=1
+SS_HD=0
+
+USER_DISPLAY=$(find /tmp/.X11-unix -user $USER | awk -F'.X11-unix/X' '{print $2}' | sort | tail -n 1)
+
+if [ $USER_DISPLAY ]; then
+    VT=0
+    DISPLAY=:$USER_DISPLAY
+    echo "Cloning running display $DISPLAY"
+else
+    VT=$(timeout 0.1s startx -- :99 2> >(grep "virtual console") | awk -F'console ' '{print $2}'| cut -c1)
+    CURR_MAX_DISPLAY_ID=$(find /tmp/.X11-unix | awk -F'.X11-unix/X' '{print $2}' | sort | tail -n 1)
+    DISPLAY=:$(($CURR_MAX_DISPLAY_ID+1))
+    sudo control_tty_access $VT 0 -1 $USER
+    startx -- $DISPLAY -layout VirtualLayout &
+    X_PID=$!
+    echo "Running startx on VT $VT and display $DISPLAY"
+    echo "X server runs in background ($X_PID)"
+fi
+
+sudo control_tty_access 0 $SS_UI $SS_HD $USER
+sunshine | grep -E "established|connected: true" &
+
+if [ $SERVICE ]; then
+    echo $VT > /tmp/sunshine_service
+else
+    if [ $X_PID ]; then
+        kill -15 $X_PID
+    fi
+
+    sudo control_tty_access $VT 0 -1 root
+fi
+exit 0 
