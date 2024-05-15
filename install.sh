@@ -37,6 +37,6 @@ lspci | grep VGA | grep NVIDIA | cut -d' ' -f1
 sudo mkdir /etc/X11/xorg.conf.d/
 sudo cp twinview.conf /etc/X11/xorg.conf.d/20-twinview.conf
 ### start ubuntu-flavored gnome
-cp xinitrc ~/.xinitrc
+cp .xinitrc ~/.xinitrc
 ### make it accessible as a service
 cp sunshine.service ~/.config/systemd/user/sunshine.service
