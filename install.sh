@@ -40,3 +40,6 @@ sudo cp twinview.conf /etc/X11/xorg.conf.d/20-twinview.conf
 cp .xinitrc ~/.xinitrc
 ### make it accessible as a service
 cp sunshine.service ~/.config/systemd/user/sunshine.service
+### copy the executable
+sudo cp sunshine_startx /usr/local/bin/sunshine_startx
+sudo chmod +x /usr/local/bin/sunshine_startx
