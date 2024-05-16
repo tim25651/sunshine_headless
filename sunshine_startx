@@ -1,8 +1,18 @@
 #!/bin/bash
 
+USAGE="Usage: $0 [service|run]"
+
+if [ $# -ne 1 ]; then
+    echo $USAGE
+    exit 1
+fi
+
 SERVICE=0
 if [ $1 == "service" ]; then
     SERVICE=1
+elif [ $1 != "run" ]; then
+    echo $USAGE
+    exit 1
 fi
 
 SS_UI=1
