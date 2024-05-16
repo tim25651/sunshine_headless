@@ -41,7 +41,8 @@ if [ $USER_DISPLAY ]; then
     DISPLAY=:$USER_DISPLAY
     echo "Cloning running display $DISPLAY"
 else
-    VT=$(timeout 0.1s startx -- :99 2> >(grep "virtual console") | awk -F'console ' '{print $2}'| cut -c1)
+    TEST_STARTX=$(timeout 0.1s startx -- :99 2>&1)
+    VT=$(echo $TEST_STARTX | awk -F'Cannot open virtual console ' '{print $2}'| cut -c1)
     CURR_MAX_DISPLAY_ID=$(find /tmp/.X11-unix | awk -F'.X11-unix/X' '{print $2}' | sort | tail -n 1)
     DISPLAY=:$(($CURR_MAX_DISPLAY_ID+1))
     sudo control_tty_access $VT 0 -1 $USER
