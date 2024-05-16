@@ -18,17 +18,18 @@ fi
 SS_UI=1
 SS_HD=0
 
-# test if audio is available
-RELEASE=$(lsb_release -a 2>&1 | grep "Release:" | awk '{ print $2 }' | cut -d'.' -f1)
-echo "Ubuntu version: $RELEASE"
-if [ $RELEASE -lt 22 ]; then
-    SINK=$(pactl list short sinks | awk '{ print $2 }')
-    echo "Available sinks: $SINK"
-    if [ $SINK == "auto_null" ]; then
-        # create virtual device
-        pactl load-module module-null-sink sink_name=vspeaker sink_properties=device.description=virtual_speaker
-    fi
-fi
+# tried to fix Error: Initial Ping Timeout, but it did not help
+# # test if audio is available
+# RELEASE=$(lsb_release -a 2>&1 | grep "Release:" | awk '{ print $2 }' | cut -d'.' -f1)
+# echo "Ubuntu version: $RELEASE"
+# if [ $RELEASE -lt 22 ]; then
+#     SINK=$(pactl list short sinks | awk '{ print $2 }')
+#     echo "Available sinks: $SINK"
+#     if [ $SINK == "auto_null" ]; then
+#         # create virtual device
+#         pactl load-module module-null-sink sink_name=vspeaker sink_properties=device.description=virtual_speaker
+#     fi
+# fi
 
 USER_DISPLAY=$(find /tmp/.X11-unix -user $USER | awk -F'.X11-unix/X' '{print $2}' | sort | head -n 1)
 # do not use ssh user displays
