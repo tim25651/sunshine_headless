@@ -12,6 +12,8 @@ sudo apt-get --purge remove xserver-xorg-video-nouveau && sudo apt-get autoremov
 
 ### give the user access to the X server
 sudo usermod -aG tty $USER
+sudo usermod -aG input $USER
+
 ### allow an ssh terminal to start the X server
 sudo sed -i 's/console/anybody/g' /etc/X11/Xwrapper.config
 
@@ -29,16 +31,20 @@ ResultInactive=no
 ResultActive=yes
 EOF
 
-# get the busid
-# https://askubuntu.com/questions/1062659/ci-bus-id-and-gpu-id
-lspci | grep VGA | grep NVIDIA | cut -d' ' -f1
-
 ### activate twinview
 if [ ! -d "/etc/X11/xorg.conf.d/" ]; then sudo mkdir /etc/X11/xorg.conf.d/; fi
 # then either
 sudo cp twinview_with_real.conf /etc/X11/xorg.conf.d/20-twinview.conf
 # or
 sudo cp twinview_just_virtual.conf /etc/X11/xorg.conf.d/20-twinview.conf
+
+# get the busid
+# https://askubuntu.com/questions/1062659/ci-bus-id-and-gpu-id
+lspci | grep VGA | grep NVIDIA | cut -d' ' -f1
+# convert the hex to decimal and set bus id to yours and adjust it
+export BUS_ID="PCI:12:0:0" 
+sudo sed -i "s/PCI:1:0:0/$BUS_ID/g" /etc/X11/xorg.conf.d/20-twinview.conf
+unset BUS_ID
 
 ### start ubuntu-flavored gnome
 cp .xinitrc ~/.xinitrc
