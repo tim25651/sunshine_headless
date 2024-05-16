@@ -67,4 +67,5 @@ else
     echo "Cleanup ..."
     sudo control_tty_access $VT 0 -1 root
 fi
+
 exit 0
