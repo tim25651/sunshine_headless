@@ -20,6 +20,10 @@ if [ $RELEASE -lt 22 ]; then
 fi
 
 USER_DISPLAY=$(find /tmp/.X11-unix -user $USER | awk -F'.X11-unix/X' '{print $2}' | sort | head -n 1)
+# do not use ssh user displays
+if [ $USER_DISPLAY -gt 1000 ]; then
+    unset USER_DISPLAY
+fi
 
 if [ $USER_DISPLAY ]; then
     VT=0
