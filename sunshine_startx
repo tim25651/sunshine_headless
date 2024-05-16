@@ -27,6 +27,7 @@ if [ $RELEASE -lt 22 ]; then
     if [ $SINK == "auto_null" ]; then
         # create virtual device
         pactl load-module module-null-sink sink_name=vspeaker sink_properties=device.description=virtual_speaker
+    fi
 fi
 
 USER_DISPLAY=$(find /tmp/.X11-unix -user $USER | awk -F'.X11-unix/X' '{print $2}' | sort | head -n 1)
