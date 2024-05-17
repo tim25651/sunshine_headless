@@ -53,3 +53,12 @@ cp sunshine.service ~/.config/systemd/user/sunshine.service
 ### copy the executable
 sudo cp sunshine_startx /usr/local/bin/sunshine_startx
 sudo chmod +x /usr/local/bin/sunshine_startx
+
+
+# Uninstall
+# rm ~/.config/systemd/user/sunshine.service
+# sudo rm /etc/X11/xorg.conf.d/20-twinview.conf
+# sudo rm /etc/polkit-1/localauthority/50-local.d/50-allow-colord.pkla
+# sudo rm /usr/local/sbin/control_tty_access
+# sudo rm /etc/sudoers.d/20-control_tty_access
+# sudo sed -i 's/anybody/console/g' /etc/X11/Xwrapper.config
